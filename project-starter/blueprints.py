@@ -18,10 +18,14 @@ def write_main():
 
 def write_makefile(NAME):
     makefile_path = "Makefile"
+    message = ""
 
     if os.path.exists(makefile_path):
-        return False
-        "Makefile already exists. Generation aborted."
+        backup_path = "Makefile.bak"
+        if os.path.exists(backup_path):
+            os.remove(backup_path)  # Supprime l'ancien backup s'il existe
+        shutil.move(makefile_path, backup_path)  # Renomme Makefile → Makefile.bak
+        message = f"Old Makefile backed up as {backup_path}"
 
     src_files = [os.path.join(SRC_DIR, f) for f in os.listdir(SRC_DIR) if f.endswith(".cpp")]
     src_list = " ".join(src_files)
@@ -61,7 +65,8 @@ re: fclean all
 
     with open(makefile_path, "w") as f:
         f.write(makefile_content)
-    return True, "Makefile generated."
+    # Return both the success status and the message
+    return True, message or "Makefile generated."  # This will return either the backup message or the default success message
 
 
 def write_class_files(class_name):
