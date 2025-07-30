@@ -61,7 +61,13 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re"""
+run: all 
+\t./$(NAME)
+
+vg: 
+\t$(VG) $(VGFLAGS) ./$(NAME) 
+
+.PHONY: all clean fclean re run vg"""
 
     with open(makefile_path, "w") as f:
         f.write(makefile_content)
