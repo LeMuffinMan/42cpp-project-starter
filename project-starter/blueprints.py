@@ -26,25 +26,39 @@ def write_makefile(NAME):
     src_files = [os.path.join(SRC_DIR, f) for f in os.listdir(SRC_DIR) if f.endswith(".cpp")]
     src_list = " ".join(src_files)
 
-    makefile_content = f"""CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++98 -I{INC_DIR}
-SRC = {src_list}
-OBJ = $(SRC:.cpp=.o)
+    makefile_content = f"""CXX = c++
+CXXFLAGS = -Wall -Wextra -std=c++98 -I{INC_DIR} -MMD -MP
+SRC_DIR = src
+OBJS_DIR = .objs
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJS_DIR)/%.o,$(SRCS))
+DEPS = $(OBJS:.o=.d)
+
 NAME = {NAME}
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJS)
 \t$(CXX) $(CXXFLAGS) -o $@ $^
 
-%.o: %.cpp
+$(OBJS_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJS_DIR)
 \t$(CXX) $(CXXFLAGS) -c $< -o $@
 
-clean:
-\trm -f $(OBJ) $(NAME)
+$(OBJS_DIR):
+\tmkdir -p $(OBJS_DIR)
 
-.PHONY: all clean
-"""
+-include $(DEPS)
+
+clean:
+\trm -rf $(OBJS_DIR)
+
+fclean: clean
+\trm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re"""
+
     with open(makefile_path, "w") as f:
         f.write(makefile_content)
     return True, "Makefile generated."

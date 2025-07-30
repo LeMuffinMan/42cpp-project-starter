@@ -21,12 +21,12 @@ if [ -z "$files" ]; then
     exit 1
 fi
 
-new_src_line="SRC ="
+new_src_line="SRCS ="
 for f in $files; do
     new_src_line+=" $f"
 done
 
-sed -i -E "s|^SRC\s*=.*|$new_src_line|" "$MAKEFILE"
+sed -i -E "s|^SRCS\s*=.*|$new_src_line|" "$MAKEFILE"
 
 echo "Makefile updated:"
 echo "$new_src_line"
