@@ -42,10 +42,10 @@ NAME = {NAME}
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) Makefile
 \t$(CXX) $(CXXFLAGS) -o $@ $^
 
-$(OBJS_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJS_DIR)
+$(OBJS_DIR)/%.o: $(SRC_DIR)/%.cpp Makefile | $(OBJS_DIR)
 \t$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJS_DIR):
