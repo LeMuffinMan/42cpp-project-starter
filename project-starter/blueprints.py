@@ -47,7 +47,8 @@ OBJS_DIR = .objs
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJS_DIR)/%.o,$(SRCS))
 DEPS = $(OBJS:.o=.d)
-
+VG = valgrind 
+VGFLAGS = --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes
 NAME = {NAME}
 
 all: $(NAME)
