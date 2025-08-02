@@ -6,14 +6,24 @@ def write_main():
     main_path = os.path.join(SRC_DIR, "main.cpp")
     if os.path.exists(main_path):
         return False, "main.cpp already exists. Generation aborted."
-    main_content = """int main(void)
-{
+    
+    class_includes = []
+    if os.path.exists(INC_DIR):
+        for file in os.listdir(INC_DIR):
+            if file.endswith(".hpp"):
+                class_name = file[:-4]  # Enlève l'extension .hpp
+                class_includes.append(f'#include "{file}"')
+    
+    includes_content = "\n".join(class_includes) + "\n\n" if class_includes else ""
+    
+    main_content = f"""{includes_content}int main(void)
+{{
     return 0;
-}
+}}
 """
     with open(main_path, "w") as f:
         f.write(main_content)
-    return True, "main.cpp generated."
+    return True, "main.cpp generated with class includes."
 
 
 def write_makefile(NAME):
@@ -31,7 +41,7 @@ def write_makefile(NAME):
     src_list = " ".join(src_files)
 
     makefile_content = f"""CXX = c++
-CXXFLAGS = -Wall -Wextra -std=c++98 -I{INC_DIR} -MMD -MP
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I{INC_DIR} -MMD -MP
 SRC_DIR = src
 OBJS_DIR = .objs
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
