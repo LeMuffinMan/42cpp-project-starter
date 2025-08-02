@@ -33,8 +33,8 @@ def write_makefile(NAME):
     if os.path.exists(makefile_path):
         backup_path = "Makefile.bak"
         if os.path.exists(backup_path):
-            os.remove(backup_path)  # Supprime l'ancien backup s'il existe
-        shutil.move(makefile_path, backup_path)  # Renomme Makefile → Makefile.bak
+            os.remove(backup_path)
+        shutil.move(makefile_path, backup_path)
         message = f"Old Makefile backed up as {backup_path}"
 
     src_files = [os.path.join(SRC_DIR, f) for f in os.listdir(SRC_DIR) if f.endswith(".cpp")]
@@ -52,10 +52,10 @@ NAME = {NAME}
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) 
 \t$(CXX) $(CXXFLAGS) -o $@ $^
 
-$(OBJS_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJS_DIR)
+$(OBJS_DIR)/%.o: $(SRC_DIR)/%.cpp Makefile | $(OBJS_DIR)
 \t$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJS_DIR):
