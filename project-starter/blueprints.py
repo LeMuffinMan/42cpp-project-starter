@@ -42,10 +42,9 @@ def write_makefile(NAME):
 
     makefile_content = f"""CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I{INC_DIR} -MMD -MP
-SRC_DIR = src
 OBJS_DIR = .objs
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
-OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJS_DIR)/%.o,$(SRCS))
+SRCS = $(wildcard .)
+OBJS = $(patsubst src/%.cpp,$(OBJS_DIR)/%.o,$(SRCS))
 DEPS = $(OBJS:.o=.d)
 VG = valgrind 
 VGFLAGS = --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes
@@ -56,7 +55,7 @@ all: $(NAME)
 $(NAME): $(OBJS) 
 \t$(CXX) $(CXXFLAGS) -o $@ $^
 
-$(OBJS_DIR)/%.o: $(SRC_DIR)/%.cpp Makefile | $(OBJS_DIR)
+$(OBJS_DIR)/%.o: src/%.cpp Makefile | $(OBJS_DIR)
 \t$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJS_DIR):
@@ -128,8 +127,9 @@ private:
 {class_name}& {class_name}::operator=(const {class_name}& other)
 {{
     std::cout << "{class_name} Copy assignment operator called" << std::endl;
-    if (this != &other) {{
-        // complete here
+    if (this != &other)
+    {{
+
     }}
     return *this;
 }}
@@ -139,7 +139,6 @@ private:
     std::cout << "{class_name} Destructor called" << std::endl;
 }}
 
-// Here write any other utility functions for this class
 """
     with open(hpp_path, "w") as f:
         f.write(hpp_content)
