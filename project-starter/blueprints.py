@@ -100,12 +100,11 @@ class {class_name}
 {{
 public:
     {class_name}(); // Default constructor
-    {class_name}(const {class_name}& other); // Copy constructor
-    {class_name}& operator=(const {class_name}& other); // Copy assignment
-    ~{class_name}(); // Destructor
+    {class_name}(const {class_name}& other);
+    {class_name}& operator=(const {class_name}& other);
+    ~{class_name}();
 
 private:
-    // Add private members here
 }};
 
 #endif
