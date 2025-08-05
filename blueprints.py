@@ -11,7 +11,7 @@ def write_main():
     if os.path.exists(INC_DIR):
         for file in os.listdir(INC_DIR):
             if file.endswith(".hpp"):
-                class_name = file[:-4]  # Enlève l'extension .hpp
+                class_name = file[:-4]
                 class_includes.append(f'#include "{file}"')
     
     includes_content = "\n".join(class_includes) + "\n\n" if class_includes else ""
@@ -81,8 +81,7 @@ vg:
 
     with open(makefile_path, "w") as f:
         f.write(makefile_content)
-    # Return both the success status and the message
-    return True, message or "Makefile generated."  # This will return either the backup message or the default success message
+    return True, message or "Makefile generated."
 
 
 def write_class_files(class_name):
@@ -99,7 +98,7 @@ def write_class_files(class_name):
 class {class_name}
 {{
 public:
-    {class_name}(); // Default constructor
+    {class_name}();
     {class_name}(const {class_name}& other);
     {class_name}& operator=(const {class_name}& other);
     ~{class_name}();
